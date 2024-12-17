@@ -1,0 +1,14 @@
+services:
+  - type: worker
+    name: yoinker
+    runtime: go
+    region: oregon
+    buildCommand: ./render-build.sh
+    startCommand: ./yoinker
+    envVars:
+      - key: RUN_PERIOD
+        sync: false
+      - key: WALLET
+        sync: false
+      - key: BASE_RPC
+        sync: false
