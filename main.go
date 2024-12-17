@@ -44,13 +44,6 @@ func main() {
 	runPeriod := os.Getenv("RUN_PERIOD")
 	wallet := os.Getenv("WALLET")
 	interval := fmt.Sprintf("@every %v", runPeriod)
-
-	tx, err := yoinker(client, wallet)
-	if err != nil {
-		log.Fatalf("error yoinking: %v", err)
-	}
-	fmt.Printf("yoinked: %s\n", tx.Hash().Hex())
-
 	_, err = runner.AddFunc(interval, func() {
 		tx, err := yoinker(client, wallet)
 		if err != nil {
