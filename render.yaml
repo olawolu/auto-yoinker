@@ -1,6 +1,7 @@
 services:
   - type: worker
     name: yoinker
+    plan: free
     runtime: go
     region: oregon
     buildCommand: ./render-build.sh

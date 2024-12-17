@@ -43,7 +43,15 @@ func main() {
 
 	runPeriod := os.Getenv("RUN_PERIOD")
 	wallet := os.Getenv("WALLET")
-	_, err = runner.AddFunc(runPeriod, func() {
+	interval := fmt.Sprintf("@every %v", runPeriod)
+
+	tx, err := yoinker(client, wallet)
+	if err != nil {
+		log.Fatalf("error yoinking: %v", err)
+	}
+	fmt.Printf("yoinked: %s\n", tx.Hash().Hex())
+
+	_, err = runner.AddFunc(interval, func() {
 		tx, err := yoinker(client, wallet)
 		if err != nil {
 			log.Printf("error yoinking: %v", err)
@@ -91,12 +99,13 @@ func yoinker(client *ethclient.Client, walletKey string) (*types.Transaction, er
 		return nil, err
 	}
 	// Call the contract
-	transactionOpts, err := bind.NewKeyedTransactorWithChainID(pk, big.NewInt(5432))
+	transactionOpts, err := bind.NewKeyedTransactorWithChainID(pk, big.NewInt(8453))
 	if err != nil {
 		err = fmt.Errorf("error creating transaction options: %v", err)
 		return nil, err
 	}
 
+	fmt.Println("Yoinking...", transactionOpts.From.Hex())
 	tx, err := yoinkInstance.Yoink(transactionOpts)
 	if err != nil {
 		err = fmt.Errorf("error calling contract: %v", err)
